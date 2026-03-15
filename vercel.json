@@ -22,7 +22,7 @@
     },
     {
       "source": "/cn",
-      "destination": "/index-cn.html"
+      "destination": "/index.html"
     }
   ],
   "headers": [
