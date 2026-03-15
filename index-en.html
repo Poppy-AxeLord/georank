@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GEO Rank Aggregator - GEO排行聚合器</title>
+<meta name="description" content="GEO Rank Aggregator specializes in AI model product ranking optimization, helping businesses improve their search rankings across major AI model platforms, similar to traditional SEO but tailored for the AI model ecosystem.">
+<meta name="keywords" content="GEO ranking, AI model ranking, AI model optimization, AI model SEO, model ranking, AI product promotion, AI platform optimization">
+<link rel="icon" type="image/png" href="assets/logo.png" sizes="32x32">
+<link rel="icon" type="image/png" href="assets/logo.png" sizes="16x16">
+<link rel="apple-touch-icon" href="assets/logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="lib/vue.global.prod.js"></script>
+<script src="lib/fuse.min.js"></script>
+<link rel="stylesheet" href="styles.css">
+<script src="https://cdn.counter.dev/script.js" data-id="e9f28259-b285-4bcf-950c-58a735654248" data-utcoffset="8"></script>
+</head>
+<body>
+
+<div id="app" class="page">
+
+  <header class="top-nav">
+    <div class="brand">
+      <div class="brand-logo">
+        <img src="assets/logo.png" alt="GEO Rank">
+      </div>
+      <div class="brand-meta">
+        <span class="brand-name">GEO RANK</span>
+        <span class="brand-tagline">Geo Ranking Aggregator</span>
+      </div>
+    </div>
+    <div class="nav-links-container">
+      <nav class="nav-links">
+        <a href="#ranking">Rankings</a>
+        <a href="#providers">Providers</a>
+        <a href="#contact">Contact Us</a>
+      </nav>
+    </div>
+    <div class="nav-cta-container">
+      <button class="nav-cta">Launch App</button>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-badge">
+      <span class="hero-badge-dot"></span>
+      <span>GEO · Ranking Aggregator</span>
+    </div>
+    <h1>Discover the Best <span>GEO Ranking Aggregator</span></h1>
+    <p>Find the Best, Be the Best</p>
+    <div class="search-box">
+      <div class="input-wrapper" style="position: relative;">
+        <input type="text" v-model="searchInput" @keyup.enter="performSearch" placeholder="e.g., Recommend cars under 200,000" />
+        <button class="search-icon" @click="performSearch" title="Search">
+          <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+        </button>
+      </div>
+    </div>
+    
+    <div class="barrage-wrapper">
+      <div id="barrage-container"></div>
+    </div>
+  </section>
+
+  <!-- RANKINGS -->
+  <section class="ranking" id="ranking">
+    <div class="ranking-header">
+      <h2>GEO Ranking Board</h2>
+    </div> 
+    <div class="date">
+      <svg class="date-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#8e9cb3" stroke-width="2"/>
+        <path d="M12 8V12" stroke="#8e9cb3" stroke-width="2" stroke-linecap="round"/>
+        <path d="M12 16H12.01" stroke="#8e9cb3" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      Data as of March 2026
+    </div>
+    <div class="ranking-shell">
+      <div class="ranking-shell-inner">
+    <div class="grid">
+      <div class="card" v-for="model in currentModels" :key="model.name" :class="{ 'icon-grid-card': model.name === 'Model 6', 'locked-card': model.name === 'Model 6' }">
+        <div class="lock-overlay" v-if="model.name === 'Model 6'">
+          <h4>Subscribe to unlock more</h4>
+          <button class="subscribe-btn">Subscribe</button>
+        </div>
+        <div class="logo" v-if="model.name === '豆包'" style="background: none; display: flex; align-items: center; justify-content: center;">
+          <img src="assets/doubao.png" alt="Doubao" style="width: 42px; height: 42px; object-fit: contain; border-radius: 10px;">
+        </div> 
+        <div class="logo" v-else-if="model.name === '通义千问'" style="background: none; display: flex; align-items: center; justify-content: center;">
+          <img src="assets/qwen.svg" alt="Qwen" style="width: 42px; height: 42px; object-fit: contain; border-radius: 10px;">
+        </div>
+        <div class="logo" v-else-if="model.name === 'DeepSeek'" style="background: none; display: flex; align-items: center; justify-content: center;">
+          <img src="assets/deepseek.svg" alt="DeepSeek" style="width: 42px; height: 42px; object-fit: contain; border-radius: 10px;">
+        </div>
+        <div class="logo" v-else-if="model.name === 'Kimi'" style="background: none; display: flex; align-items: center; justify-content: center;">  
+          <img src="assets/kimi.png" alt="Kimi" style="width: 42px; height: 42px; object-fit: contain; border-radius: 10px;">
+        </div>
+        <div class="logo" v-else-if="model.name === '文心一言'" style="background: none; display: flex; align-items: center; justify-content: center;">
+          <img src="assets/yiyan.png" alt="Yiyan" style="width: 42px; height: 42px; object-fit: contain; border-radius: 10px;">
+        </div>
+        <div class="logo" v-else-if="model.name !== 'Model 6'">
+        </div>
+        <div class="name" v-if="model.name !== 'Model 6'">{{ model.name }}</div>
+        <ol class="feature-list" v-if="model.name !== 'Model 6'">
+          <li v-for="(item, index) in model.list" :key="index">{{ item }}</li>
+        </ol>
+        <div class="icon-grid" v-if="model.name === 'Model 6'">
+        <div class="icon-item" style="background: none; display: flex; align-items: center; justify-content: center;">
+            <img src="assets/minimax.jpg" alt="Minimax" style="width: 53px; height: 53px; object-fit: contain; border-radius: 10px;">
+        </div>
+        <div class="icon-item" style="background: none; display: flex; align-items: center; justify-content: center;">
+            <img src="assets/yuanbao.webp" alt="Yuanbao" style="width: 53px; height: 53px; object-fit: contain; border-radius: 10px;">
+        </div>
+          
+          <div class="icon-item" style="background: none; display: flex; align-items: center; justify-content: center;">
+            <img src="assets/xunfei.svg" alt="Xunfei" style="width: 53px; height: 53px; object-fit: contain; border-radius: 10px;">
+          </div>
+          <div class="icon-item" style="background: linear-gradient(135deg, #ef4444, #f97316);"></div>
+          
+          <div class="icon-item" style="background: none; display: flex; align-items: center; justify-content: center;">
+            <img src="assets/chatgpt.png" alt="ChatGPT" style="width: 53px; height: 53px; object-fit: contain; border-radius: 10px;">
+          </div>
+          <div class="icon-item" style="background: none; display: flex; align-items: center; justify-content: center;">
+            <img src="assets/claude.svg" alt="Claude" style="width: 53px; height: 53px; object-fit: contain; border-radius: 10px;">
+          </div>
+        </div>
+      </div>
+      <div class="summary-wrapper">
+        <div class="summary-card">
+          <h3>Overall Ranking</h3>
+          <ol class="summary-list">
+            <li><span class="item-name">1. 问界 M9</span><span class="item-score">9.3</span></li>
+            <li><span class="item-name">2. 奥迪 A6L</span><span class="item-score">8.9</span></li>
+            <li><span class="item-name">3. 宝马 5 系</span><span class="item-score">8.7</span></li>
+            <li><span class="item-name">4. 理想 L9</span><span class="item-score">8.5</span></li>
+            <li><span class="item-name">5. 奔驰 E 级</span><span class="item-score">8.2</span></li>
+            <li><span class="item-name">6. 奔驰 GLC</span><span class="item-score">8.0</span></li>
+            <li><span class="item-name">7. 奔驰 GLE</span><span class="item-score">7.9</span></li>
+            <li><span class="item-name">8. 极氪 009</span><span class="item-score">7.8</span></li>
+            <li><span class="item-name">9. 宝马 X5</span><span class="item-score">7.7</span></li>
+            <li><span class="item-name">10. 雷克萨斯 ES</span><span class="item-score">7.6</span></li>
+          </ol>
+        </div>
+        <div class="summary-card locked-card">
+          <div class="lock-overlay">
+            <h4>Subscribe to unlock more</h4>
+            <button class="subscribe-btn">Subscribe</button>
+          </div>
+          <h3>Compared to Previous Period</h3>
+          <ol class="summary-list">
+            <li>
+              <span class="item-name">1. Surfer AI</span>
+              <span class="item-score">9.8</span>
+              <span class="rank-change up">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 14l5-5 5 5z"/></svg>
+                <span class="change-value">+2</span>
+              </span>
+            </li>
+            <li>
+              <span class="item-name">2. SEMrush</span>
+              <span class="item-score">9.7</span>
+              <span class="rank-change down">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg>
+                <span class="change-value">-1</span>
+              </span>
+            </li>
+            <li>
+              <span class="item-name">3. Ahrefs</span>
+              <span class="item-score">9.6</span>
+              <span class="rank-change up">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 14l5-5 5 5z"/></svg>
+                <span class="change-value">+3</span>
+              </span>
+            </li>
+            <li>
+              <span class="item-name">4. Screaming Frog</span>
+              <span class="item-score">9.5</span>
+              <span class="rank-change down">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg>
+                <span class="change-value">-2</span>
+              </span>
+            </li>
+            <li>
+              <span class="item-name">5. Sitebulb</span>
+              <span class="item-score">9.3</span>
+              <span class="rank-change up">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 14l5-5 5 5z"/></svg>
+                <span class="change-value">+1</span>
+              </span>
+            </li>
+            <li>
+              <span class="item-name">6. NeuronWriter</span>
+              <span class="item-score">9.2</span>
+              <span class="rank-change up">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 14l5-5 5 5z"/></svg>
+                <span class="change-value">+4</span>
+              </span>
+            </li>
+            <li>
+              <span class="item-name">7. Frase</span>
+              <span class="item-score">9.1</span>
+              <span class="rank-change down">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg>
+                <span class="change-value">-1</span>
+              </span>
+            </li>
+            <li>
+              <span class="item-name">8. DeepCrawl</span>
+              <span class="item-score">9.0</span>
+              <span class="rank-change down">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg>
+                <span class="change-value">-3</span>
+              </span>
+            </li>
+            <li>
+              <span class="item-name">9. Majestic</span>
+              <span class="item-score">8.9</span>
+              <span class="rank-change up">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 14l5-5 5 5z"/></svg>
+                <span class="change-value">+2</span>
+              </span>
+            </li>
+            <li>
+              <span class="item-name">10. BuzzSumo</span>
+              <span class="item-score">8.8</span>
+              <span class="rank-change down">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg>
+                <span class="change-value">-5</span>
+              </span>
+            </li>
+          </ol>
+        </div>
+      </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- POPULAR PROVIDERS -->
+  <section class="providers-full" id="providers">
+    <div class="providers-inner">
+      <div class="providers-header">
+        <div class="providers-title">Popular Providers · PARTNERS</div>
+      </div>
+      <div class="providers-cloud">
+        <div class="provider-pill">
+          <div class="provider-logo">
+            <img src="assets/GrowthSuperman.png" alt="GrowthSuperman Provider Logo" />
+          </div>
+          <span class="provider-name">GrowthSuperman</span>
+        </div>
+        <div class="provider-pill">
+          <div class="provider-logo">
+            <img src="assets/pureblue.ico" alt="PureblueAI 清蓝" />
+          </div>
+          <span class="provider-name">PureblueAI 清蓝</span>
+        </div>
+        <div class="provider-pill">
+          <div class="provider-logo">
+            <img src="assets/ODF.png" alt="A3" />
+          </div>
+          <span class="provider-name">百分点科技</span>
+        </div>
+        <div class="provider-pill">
+          <div class="provider-logo">
+            <img src="assets/ODF (1).png" alt="A4" />
+          </div>
+          <span class="provider-name">蓝色光标（BlueFocus）</span>
+        </div>
+        <div class="provider-pill locked-card">
+          <div class="lock-overlay">
+            <span>Position Available</span>
+          </div>
+          <div class="provider-logo">
+            <img src="assets/provider-a5.png" alt="A5" onerror="this.style.display='none'" />
+          </div>
+          <span class="provider-name">A5 Provider</span>
+        </div>
+        <div class="provider-pill locked-card">
+          <div class="lock-overlay">
+            <span>Position Available</span>
+          </div>
+          <div class="provider-logo">
+            <img src="assets/provider-a6.png" alt="A6" onerror="this.style.display='none'" />
+          </div>
+          <span class="provider-name">A6 Provider</span>
+        </div>
+        <div class="provider-pill locked-card">
+          <div class="lock-overlay">
+            <span>Position Available</span>
+          </div>
+          <div class="provider-logo">
+            <img src="assets/provider-a7.png" alt="A7" onerror="this.style.display='none'" />
+          </div>
+          <span class="provider-name">A7 Provider</span>
+        </div>
+        <div class="provider-pill locked-card">
+          <div class="lock-overlay">
+            <span>Position Available</span>
+          </div>
+          <div class="provider-logo">
+            <img src="assets/provider-a8.png" alt="A8" onerror="this.style.display='none'" />
+          </div>
+          <span class="provider-name">A8 Provider</span>
+        </div>
+        <div class="provider-pill locked-card">
+          <div class="lock-overlay">
+            <span>Position Available</span>
+          </div>
+          <div class="provider-logo">
+            <img src="assets/provider-a9.png" alt="A9" onerror="this.style.display='none'" />
+          </div>
+          <span class="provider-name">A9 Provider</span>
+        </div>
+        <div class="provider-pill locked-card">
+          <div class="lock-overlay">
+            <span>Position Available</span>
+          </div>
+          <div class="provider-logo">
+            <img src="assets/provider-a10.png" alt="A10" onerror="this.style.display='none'" />
+          </div>
+          <span class="provider-name">A10 Provider</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT US -->
+  <section class="contact" id="contact">
+    <div class="container">
+      <h2>Contact Us</h2>
+      <form class="contact-form" action="https://formsubmit.co/contact@geo-rank.cn" method="POST">
+        <div class="form-group">
+          <label for="email">Contact Information, or directly email contact@geo-rank.cn</label>
+          <input placeholder="Please enter your contact information" required />
+        </div>
+        <div class="form-group">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" placeholder="Please enter your message / custom requirements" rows="5" required></textarea>
+        </div>
+        <input type="hidden" name="_subject" value="New Contact Form Submission">
+        <input type="hidden" name="_next" value="https://your-website.com/thank-you.html">
+        <button type="submit" class="send-btn">Send</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="legal-info">
+      <p><a href="privacy.html">Privacy Policy</a> | <a href="terms.html">Terms of Service</a> | <a href="disclaimer.html">Disclaimer</a> | <span> contact@geo-rank.cn</span> </p>
+      <p>© 2026 GEO Rank Aggregator. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+const { createApp, computed, ref, onMounted } = Vue;
+
+createApp({
+  setup() {
+    const searchQuery = ref("");
+    const searchInput = ref("");
+    const types = ref([]);
+    const selectedType = ref(null);
+
+    onMounted(async () => {
+      try {
+        const response = await fetch('data.json');
+        const data = await response.json();
+        types.value = data.types;
+        if (types.value.length > 0) {
+          selectedType.value = types.value[0];
+        }
+      } catch (error) {
+        console.error('Error loading data:', error);
+      }
+    });
+
+    const performSearch = () => {
+      const query = searchInput.value.trim().toLowerCase();
+      if (query) {
+        const matchedType = types.value.find(type => 
+          type.type.toLowerCase().includes(query)
+        );
+        if (matchedType) {
+          selectedType.value = matchedType;
+        }
+      } else {
+        if (types.value.length > 0) {
+          selectedType.value = types.value[0];
+        }
+      }
+    };
+
+    const currentModels = computed(() => {
+      return selectedType.value ? selectedType.value.models : [];
+    });
+
+    return { searchQuery, searchInput, currentModels, performSearch, selectedType };
+  }
+}).mount('#app');
+</script>
+
+<script type="module">
+import Barrage from 'https://esm.sh/barrage-ui';
+
+const baseTexts = [
+  'Welcome to GEO Rank Aggregator~',
+  'Recommend the best bubble tea',
+  'Recommend some providers',
+  'Car recommendations under 200k budget',
+  'Recommend cost-effective smartphones',
+  'Recommend reliable AI models',
+  'Bookmark this page for easy access to rankings',
+  'Multi-model comparison for better decision-making',
+  'Data updates continuously, check back often',
+  'Recommend well-reputed restaurants',
+  'Recommend laptops for office work',
+  'Making a selection? Check GEO Rankings first',
+  'Don\'t forget to share the link with colleagues',
+  'Feel free to leave your requirements below~',
+  'Recommend quality tourist attractions',
+  'Recommend useful software tools',
+  'Recommend worthwhile investment products',
+  'Recommend programming languages for beginners',
+  'Recommend cost-effective home appliances',
+  'Recommend reliable educational institutions',
+  'Recommend popular movies',
+  'Recommend fitness equipment',
+  'Recommend cost-effective skincare products',
+  'Recommend books for learning',
+  'Recommend reliable renovation companies',
+  'Recommend gifts for special occasions',
+  'Recommend popular games',
+  'Recommend family insurance',
+  'Recommend cost-effective snacks',
+  'Recommend reliable pet hospitals',
+  'Recommend travel backpacks',
+  'Recommend popular TV shows',
+  'Recommend office chairs',
+  'Recommend cost-effective cameras',
+  'Recommend online courses for learning',
+  'Recommend reliable moving companies',
+  'Recommend athletic shoes',
+  'Recommend popular music',
+  'Recommend baby formula',
+  'Recommend cost-effective watches',
+  'Recommend reliable study abroad agencies',
+  'Welcome to GEO Rank Aggregator~',
+];
+
+const barrageData = [];
+const duration = 3000000;
+const count = 1000;
+
+for (let i = 0; i < count; i++) {
+  const text = baseTexts[i % baseTexts.length];
+  const time = Math.floor((i / count) * duration);
+  barrageData.push({
+    time,
+    text,
+  });
+}
+
+window.addEventListener('load', () => {
+  const container = document.getElementById('barrage-container');
+  if (!container) return;
+
+  const barrage = new Barrage({
+    container,
+    data: barrageData,
+    config: {
+      duration,
+      defaultColor: '#fff',
+      speed: 20,
+      fontSize: 13,
+      opacity: 0.5,
+    },
+  });
+
+  barrage.goto(duration / 2);
+  barrage.play();
+
+  container.addEventListener('click', () => {
+    console.log('Clicked on barrage area');
+  });
+});
+</script>
+
+</body>
+</html>
