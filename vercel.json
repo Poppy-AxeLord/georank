@@ -1,28 +1,7 @@
 {
-  "routes": [
-    {
-      "source": "/",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/zh",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/zh/:path*",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/en",
-      "destination": "/index-en.html"
-    },
-    {
-      "source": "/en/:path*",
-      "destination": "/index-en.html"
-    },
-    {
-      "source": "/cn",
-      "destination": "/index.html"
-    }
+  "rewrites": [
+    { "source": "/en(.*)", "destination": "/index-en.html" },
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/cn", "destination": "/index.html" }
   ]
 }
